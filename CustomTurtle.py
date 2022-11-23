@@ -12,24 +12,25 @@ class CustomTurtle():
         self.turtle.pendown()
         return x, y
         
-    def draw_rectangle(self,x=0,y=0,width=100,height=200,size=5,color="black",fill="",sc=(100,100)):
-        sc_w = sc[0]
-        sc_h = sc[1]
+    def draw_rectangle(self,location,dimensions,size=5,color="black",fill="",sc=(100,100)):
+        sc_w, sc_h = sc
+        x, y = 0 - sc_w / 2, sc_h / 2
+        X, Y = location
+        width, height = dimensions
         
         t = self.turtle
         t.fillcolor(fill)
         t.pencolor(color)
         t.pensize(size)
-        t.setheading(0)
-        
+        print(x + X,  y + Y)
         t.begin_fill()
         t.up()
-        t.goto(x,y)
+        t.setpos(x + X, y + Y)
         t.down()
         
         # draw top
         t.forward(width)
-        
+
         # draw right
         t.right(90)
         t.forward(height)
@@ -43,5 +44,5 @@ class CustomTurtle():
         t.forward(height)
         t.end_fill()
         
-        self.goto(0 - sc_w/2, sc_h/2)
+        self.goto(x, y)
     

@@ -42,13 +42,13 @@ SPLASH_LINGER_TIME = 3
 
 class GameWindow:
     
-    def __init__(self, title="Game Window", width=WINDOW_SIZE[0], height=WINDOW_SIZE[1]):
+    def __init__(self, title="Game Window", size=WINDOW_SIZE):
         self.window = turtle.Screen()
         
-        self.X = 0 - width/2
-        self.Y = height/2
+        self.width, self.height = size
+        self.corner = 0 - self.width/2, self.height/2
         
-        turtle.setup(width, height)
+        turtle.setup(self.width, self.height)
         turtle.title(title)
     
     def set_bg_image(self, path):
@@ -66,75 +66,63 @@ class GameWindow:
     def create_turtle(self):
         return CustomTurtle()
 
-    def draw_board(self, player_name, total_moves, leaderboard):
+    def draw_board(self, total_moves, leaderboard):
+        
+        x, y = self.corner
+
+        # ----- DRAW BOARDS ------
         board = self.create_turtle()
         
-        x = self.X
-        y = self.Y
-        
-        # ----- DRAW BOARDS ------
         # Puzzle board
-        w, h = PUZZLEBOARD_SIZE
-        X, Y = LOCATION_PUZZLEBOARD
-        board.draw_rectangle(x + X, y - Y, w, h, sc=WINDOW_SIZE)
+        board.draw_rectangle(location=LOCATION_PUZZLEBOARD, dimensions=PUZZLEBOARD_SIZE, sc=WINDOW_SIZE)
         
         # Leader board
-        w, h = LEADERBOARD_SIZE
-        X, Y = LOCATION_LEADERBOARD
-        board.draw_rectangle(x + X, y - Y, w, h, color="blue", sc=WINDOW_SIZE)
+        board.draw_rectangle(location=LOCATION_LEADERBOARD, dimensions=LEADERBOARD_SIZE, color="blue", sc=WINDOW_SIZE)
         
         # Options board
-        w, h = OPTIONSBOARD_SIZE
-        X, Y = LOCATION_OPTIONSBOARD
-        board.draw_rectangle(x + X, y - Y, w, h, sc=WINDOW_SIZE)
+        board.draw_rectangle(location=LOCATION_OPTIONSBOARD, dimensions=OPTIONSBOARD_SIZE, sc=WINDOW_SIZE)
         
-        # -------- DRAW BUTTONS -------
-        reset = self.create_turtle()
-        X, Y = LOCATION_RESET_BTN
-        self.window.addshape("assets/resources/resetbutton.gif")
-        reset.turtle.shape("assets/resources/resetbutton.gif")   
-        reset.goto(x + X, y - Y)
-        reset.turtle.showturtle()
-        
-        load = self.create_turtle()
-        X, Y = LOCATION_LOAD_BTN
-        self.window.addshape("assets/resources/loadbutton.gif")        
-        load.turtle.shape("assets/resources/loadbutton.gif") 
-        load.goto(x + X, y - Y)
-        load.turtle.showturtle()
-        
-        quit = self.create_turtle()
-        X, Y = LOCATION_QUIT_BTN
-        self.window.addshape("assets/resources/quitbutton.gif")        
-        quit.turtle.shape("assets/resources/quitbutton.gif")        
-        quit.goto(x + X, y - Y)
-        quit.turtle.showturtle()
+        # -------- PLACE BUTTONS -------
+        reset = self.place_image("assets/resources/resetbutton.gif", LOCATION_RESET_BTN)
+        load = self.place_image("assets/resources/loadbutton.gif", LOCATION_LOAD_BTN)
+        quit = self.place_image("assets/resources/quitbutton.gif", LOCATION_QUIT_BTN)
         
         # ------ DRAW TEXT ------
-        moves = self.create_turtle()
-        X, Y = LOCATION_MOVES_TEXT
-        moves.goto(x + X, y - Y)
-        moves.turtle.write(f"Player Moves: {total_moves}", font=MOVES_FONT)
-        
-        leader = self.create_turtle()
-        X, Y = LOCATION_LEADERBOARD_TITLE_TEXT
-        leader.goto(x + X, y - Y)
-        leader.turtle.pencolor("blue")
-        leader.turtle.write(f"Leaders", font=LEADERBOARD_TITLE_FONT)
+        moves = self.place_text(f"Player Moves: {total_moves}", MOVES_FONT, LOCATION_MOVES_TEXT)
+        leader = self.place_text("Leaders", LEADERBOARD_TITLE_FONT, LOCATION_LEADERBOARD_TITLE_TEXT, "blue")
         
         # ------ LEADERBOARD NAMES -------
         X, Y = LOCATION_NAMES_START_TEXT
         for each in leaderboard:
-            t = self.create_turtle()
-            t.turtle.pencolor("blue")
-            t.goto(x + X, y - Y)
+            self.place_text(f"{each} : {leaderboard[each]}", LEADERBOARD_NAMES_FONT, (X, Y), "blue")
             Y += NAMES_TEXT_DISTANCE
-            t.turtle.write(f"{each} : {leaderboard[each]}", font=LEADERBOARD_NAMES_FONT)
     
-    # def display_round(self, image):
+    def place_image(self,image_path, coordinates):
+        x, y = self.corner
+        X, Y = coordinates
+        t = self.create_turtle()
+        self.window.addshape(image_path)        
+        t.turtle.shape(image_path)        
+        t.goto(x + X, y + Y)
+        t.turtle.showturtle()
+        return t
+    
+    def place_text(self, text, font, coordinates, color="black"):
+        x, y = self.corner
+        X, Y = coordinates
+        t = self.create_turtle()
+        t.goto(x + X, y - Y)
+        t.turtle.pencolor(color)
+        t.turtle.write(text, font)
+        return t
+    
+    def display_round(self, puzzle):
+        x, y = self.corner
+        
+            
 
-    def start_game(self, names, moves):
-        puzzle = generate_puzzle_data()
+    def start_game(self, names, moves, puzzle_name):
+        puzzle = generate_puzzle_data(puzzle_name)
         self.display_round(puzzle)
         
              

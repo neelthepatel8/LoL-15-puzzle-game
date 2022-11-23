@@ -14,10 +14,10 @@ window.display_splash("assets/resources/splash_screen.gif")
 name = window.get_input("Welcome", "Enter your name: ")
 moves = window.get_input("Moves", "Enter the number of moves you want (5 - 200): ")
 
-window.draw_board(name, moves, LEADERS)
+window.draw_board(moves, LEADERS)
 
 
-CURRENT_PUZZLE = "mario.puz"
+CURRENT_PUZZLE = "assets/mario.puz"
 window.start_game(name, moves, CURRENT_PUZZLE)
 
 window.window.exitonclick()

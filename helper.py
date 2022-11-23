@@ -1,6 +1,3 @@
-import os
-from pprint import pprint
-
 def generate_puzzle_data(f):
     data = {}
     data["images"] = {}
