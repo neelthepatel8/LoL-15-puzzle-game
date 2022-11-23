@@ -9,12 +9,10 @@ def generate_puzzle_data():
         f = os.path.join("assets", filename)
         if f.endswith(".puz"):
             with open(f, mode="r") as file:
-                print(f)
                 data[i] = {}
                 
-                
                 for index, line in enumerate(file):
-                    value = line.split(":")[1][1:].strip()
+                    value = line.split(":")[1].strip()
                     
                     if index == 0:
                         data[i]["name"] = value
@@ -34,6 +32,3 @@ def generate_puzzle_data():
                         data[i]["images"][num] = value
         i += 1
     return data
-
-d = generate_puzzle_data()
-pprint(d)

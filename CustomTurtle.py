@@ -12,7 +12,10 @@ class CustomTurtle():
         self.turtle.pendown()
         return x, y
         
-    def draw_rectangle(self,x,y,width,height,size,color,fill,sc_w, sc_h):
+    def draw_rectangle(self,x=0,y=0,width=100,height=200,size=5,color="black",fill="",sc=(100,100)):
+        sc_w = sc[0]
+        sc_h = sc[1]
+        
         t = self.turtle
         t.fillcolor(fill)
         t.pencolor(color)

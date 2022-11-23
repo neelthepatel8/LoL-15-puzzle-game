@@ -19,6 +19,6 @@ window.draw_board(name, moves, LEADERS)
 
 puzzles = generate_puzzle_data()
 pprint(puzzles)
-window.start_game(name, moves)
+# window.start_game(name, moves, puzzles)
 
 window.window.exitonclick()
