@@ -1,6 +1,7 @@
 import turtle
 import time
 from CustomTurtle import CustomTurtle
+from helper import *
 
 # ------ Window Dimensions --------
 WINDOW_SIZE = 800, 730
@@ -132,9 +133,9 @@ class GameWindow:
     
     # def display_round(self, image):
 
-    # def start_game(self, names, moves):
-         
-    #     self.display_round(image)
+    def start_game(self, names, moves):
+        puzzle = generate_puzzle_data()
+        self.display_round(puzzle)
         
              
         

@@ -1,6 +1,5 @@
 from GameWindow import GameWindow
 from helper import *
-from pprint import pprint
 
 LEADERS = {
     3: "Neel",
@@ -17,8 +16,8 @@ moves = window.get_input("Moves", "Enter the number of moves you want (5 - 200):
 
 window.draw_board(name, moves, LEADERS)
 
-puzzles = generate_puzzle_data()
-pprint(puzzles)
-# window.start_game(name, moves, puzzles)
+
+CURRENT_PUZZLE = "mario.puz"
+window.start_game(name, moves, CURRENT_PUZZLE)
 
 window.window.exitonclick()
