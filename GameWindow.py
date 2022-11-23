@@ -17,15 +17,15 @@ LOCATION_LEADERBOARD = 570, 45
 LOCATION_OPTIONSBOARD = 45, 570
 
 # ------- Button Locations -------
-BUTTON_START = 500, 630
+BUTTON_START = 505, 631
 LOCATION_RESET_BTN = BUTTON_START[0], BUTTON_START[1]
 LOCATION_LOAD_BTN = BUTTON_START[0] + 100, BUTTON_START[1]
 LOCATION_QUIT_BTN = BUTTON_START[0] + 200, BUTTON_START[1]
 
 # ------ Text Locations -------
-LOCATION_MOVES_TEXT = 80, 650
-LOCATION_LEADERBOARD_TITLE_TEXT = 615, 190
-LOCATION_NAMES_START_TEXT = 615, 220
+LOCATION_MOVES_TEXT = 63, 650
+LOCATION_LEADERBOARD_TITLE_TEXT = 615, 179
+LOCATION_NAMES_START_TEXT = 615, 216
 NAMES_TEXT_DISTANCE = 30
 
 # ------- Text Attributes --------
@@ -39,6 +39,9 @@ DISTANCE_BETWEEN_OBJECTS = 45
 
 # ----- Splash Screen Settings -----
 SPLASH_LINGER_TIME = 3
+
+# 
+LOCATION_COMPLETED_BANNER_IMG = 664, 70
 
 class GameWindow:
     
@@ -116,13 +119,9 @@ class GameWindow:
         return t
     
     def display_round(self, puzzle):
-        x, y = self.corner
-        
+        self.place_image(puzzle["thumbnail"], LOCATION_COMPLETED_BANNER_IMG)        
             
 
     def start_game(self, names, moves, puzzle_name):
         puzzle = generate_puzzle_data(puzzle_name)
         self.display_round(puzzle)
-        
-             
-        
