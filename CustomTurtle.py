@@ -12,7 +12,7 @@ class CustomTurtle():
         self.turtle.pendown()
         return x, y
         
-    def draw_rectangle(self,location,dimensions,size=5,color="black",fill="",sc=(100,100)):
+    def draw_rectangle(self,location,dimensions,sc, size=5,color="black",fill=""):
         sc_w, sc_h = sc
         x, y = 0 - sc_w / 2, sc_h / 2
         X, Y = location
@@ -22,10 +22,10 @@ class CustomTurtle():
         t.fillcolor(fill)
         t.pencolor(color)
         t.pensize(size)
-        print(x + X,  y + Y)
         t.begin_fill()
+        
         t.up()
-        t.setpos(x + X, y + Y)
+        t.goto(x + X, y - Y)
         t.down()
         
         # draw top

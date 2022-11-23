@@ -71,16 +71,15 @@ class GameWindow:
         x, y = self.corner
 
         # ----- DRAW BOARDS ------
-        board = self.create_turtle()
         
         # Puzzle board
-        board.draw_rectangle(location=LOCATION_PUZZLEBOARD, dimensions=PUZZLEBOARD_SIZE, sc=WINDOW_SIZE)
+        self.create_turtle().draw_rectangle(location=LOCATION_PUZZLEBOARD, dimensions=PUZZLEBOARD_SIZE, sc=WINDOW_SIZE)
         
         # Leader board
-        board.draw_rectangle(location=LOCATION_LEADERBOARD, dimensions=LEADERBOARD_SIZE, color="blue", sc=WINDOW_SIZE)
+        self.create_turtle().draw_rectangle(location=LOCATION_LEADERBOARD, dimensions=LEADERBOARD_SIZE, color="blue", sc=WINDOW_SIZE)
         
         # Options board
-        board.draw_rectangle(location=LOCATION_OPTIONSBOARD, dimensions=OPTIONSBOARD_SIZE, sc=WINDOW_SIZE)
+        self.create_turtle().draw_rectangle(location=LOCATION_OPTIONSBOARD, dimensions=OPTIONSBOARD_SIZE, sc=WINDOW_SIZE)
         
         # -------- PLACE BUTTONS -------
         reset = self.place_image("assets/resources/resetbutton.gif", LOCATION_RESET_BTN)
@@ -103,7 +102,7 @@ class GameWindow:
         t = self.create_turtle()
         self.window.addshape(image_path)        
         t.turtle.shape(image_path)        
-        t.goto(x + X, y + Y)
+        t.goto(x + X, y - Y)
         t.turtle.showturtle()
         return t
     
@@ -113,7 +112,7 @@ class GameWindow:
         t = self.create_turtle()
         t.goto(x + X, y - Y)
         t.turtle.pencolor(color)
-        t.turtle.write(text, font)
+        t.turtle.write(text, move=False, font=font)
         return t
     
     def display_round(self, puzzle):
