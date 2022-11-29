@@ -1,3 +1,5 @@
+import random
+
 def generate_puzzle_data(f):
     data = {}
     data["images"] = {}
@@ -10,3 +12,13 @@ def generate_puzzle_data(f):
                 continue
             data[key] = value
     return data
+
+def shuffle_puzzle(puzzle):
+    keys = list(puzzle.keys())
+    random.shuffle(keys)
+        
+    shuffled = {}
+    for key in keys:
+        shuffled.update({key: puzzle[key]})
+    
+    return puzzle, shuffled

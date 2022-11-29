@@ -6,6 +6,7 @@ LEADERS = {
     5: "Mikhael",
     10: "John",
     1: "Andrew",
+    12: "Neeeeeele"
 }
 window = GameWindow(title="Puzzle Game by Neel")
 
@@ -16,8 +17,7 @@ moves = window.get_input("Moves", "Enter the number of moves you want (5 - 200):
 
 window.draw_board(moves, LEADERS)
 
+CURRENT_PUZZLE = "mario.puz"
+window.start_game(CURRENT_PUZZLE)
 
-CURRENT_PUZZLE = "assets/mario.puz"
-window.start_game(name, moves, CURRENT_PUZZLE)
-
-window.window.exitonclick()
+window.window.mainloop()
