@@ -72,19 +72,8 @@ class Puzzle:
                 
                 self.data[i].append(piece)
                 count += 1
-        
-              
-    def create_order_list(self):
-        lst = []
-        for row in self.data:
-            for piece in row:
-                if not piece.isblank: 
-                    img = piece.img[-6:].strip("/")[:-4]
-                    lst.append(int(img))
-                else:
-                    lst.append(0)
-        
-        return lst   
+                   
+      
 
     def get_neighbours(self, piece):
         x, y = piece.location
@@ -126,13 +115,22 @@ class Puzzle:
         
         piece_data, blank_data = blank_data, piece_data 
         
+        
         return self.check_win()
     
     def check_win(self):
-        print(self.create_order_list())
-        print(sorted(self.create_order_list(), reverse=True))
-        if self.create_order_list() == sorted(self.create_order_list(), reverse=True):
+        lst = []
+        for row in self.data:
+            for piece in row:
+                lst.append(piece.img[-6:-4].strip("/"))
+        
+        lst.remove("nk")
+        print(lst)
+        print(sorted(lst, reverse=True))
+        if lst == sorted(lst, reverse=True):
             return True
+                
+        
                       
     def shuffle(self):
         new_data = []
@@ -149,21 +147,3 @@ class Puzzle:
                 piece = new_data.pop()
                 self.data[i].append(piece)
                 piece.location = i, j
-        
-    
-    # def make_adjacency_matrix(self):
-    #     matrix = {}
-    #     for row_index, row in enumerate(self.puzzle_data):
-    #         for index, each in enumerate(row):
-    #             pass
-            
-    #     print(matrix)
-        
-    # def find_blank_tile(self):
-    #     self.blank_tile_data = "", 1, (1, 2)
-    #     for row in self.puzzle_data:
-    #         for img, turt in row:
-    #             if img[-9:-1] == "blank.gif":
-    #                 index = self.puzzle_data.index(row), row.index((img, turt))
-    #                 self.blank_tile_data = img, turt, index
-    #     self.blank_tile_data

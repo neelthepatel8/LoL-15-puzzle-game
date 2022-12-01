@@ -151,13 +151,16 @@ class GameWindow:
         if not blank: return
         won = self.puzzle.swap_pieces(piece, blank)
         if won:
-            win = self.create_turtle()
-            win.place_image("assets/resources/winner.gif", LOCATION_QUITMESSAGE)  
-            time.sleep(2)
-            win.turtle.hideturtle()
-            win.place_image("assets/resources/credits.gif", LOCATION_QUITMESSAGE)
-            time.sleep(2)
-            turtle.bye()
+            self.win()
+    
+    def win(self):
+        win = self.create_turtle()
+        win.place_image("assets/resources/winner.gif", LOCATION_QUITMESSAGE)  
+        time.sleep(2)
+        win.turtle.hideturtle()
+        win.place_image("assets/resources/credits.gif", LOCATION_QUITMESSAGE)
+        time.sleep(2)
+        turtle.bye()
         
     def start_game(self, x=0, y=0):
         # ------- Display Splash -------
