@@ -37,12 +37,12 @@ DISTANCE_BETWEEN_OBJECTS = 45
 SPLASH_LINGER_TIME = 3
 
 # ----- Banner ------
-LOCATION_COMPLETED_BANNER_IMG = 664, 70
+LOCATION_THUMBNAIL = 664, 70
 
 # ------ Puzzle Images --------
-DISTANCE_BETWEEN_PIECES = 16
-LOCATION_FIRST_PIECE = 20 + LOCATION_PUZZLEBOARD[0]\
-                     , 20 + LOCATION_PUZZLEBOARD[1]
+DISTANCE_BETWEEN_PIECES = 16 + 98
+LOCATION_FIRST_PIECE = 20 + 49 + LOCATION_PUZZLEBOARD[0]\
+                     , 20 + 49 + LOCATION_PUZZLEBOARD[1]
                      
 # ------- All Puzzles -------
 PUZZLES = ["fifteen", "luigi", "mario", "smiley", "yoshi"]
@@ -51,3 +51,12 @@ PUZZLES = ["fifteen", "luigi", "mario", "smiley", "yoshi"]
 QUIT_MESSAGE_PATH = "assets/resources/quitmsg.gif"
 LOCATION_QUITMESSAGE =  400, 342
 
+
+# ----- TEMP -------
+LEADERS = {
+    3: "Neel",
+    5: "Mikhael",
+    10: "John",
+    1: "Andrew",
+    12: "Neeeeeele"
+}

@@ -47,3 +47,10 @@ class CustomTurtle():
         
         self.goto(x, y)
     
+    def place_image(self, image_path, coordinates):
+        x, y = - WINDOW_SIZE[0]/2, WINDOW_SIZE[1]/2
+        X, Y = coordinates
+        turtle.register_shape(image_path)    
+        self.turtle.shape(image_path)   
+        self.goto(x + X, y - Y)
+        self.turtle.showturtle()
