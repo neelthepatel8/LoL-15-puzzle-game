@@ -1,4 +1,3 @@
-
 # ------ Window Dimensions --------
 WINDOW_SIZE = 800, 730
 

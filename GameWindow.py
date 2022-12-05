@@ -7,8 +7,6 @@ from settings import *
 from functools import partial
 import pickle
 import os
-import logging
-
 
 class GameWindow:
     def __init__(self, title="Game Window", size=WINDOW_SIZE):
@@ -26,36 +24,70 @@ class GameWindow:
         self.start_game()
         
     def set_bg_image(self, path):
+        """Sets the background image and updates window
+
+        Args:
+            path (str): path of image
+        """
         self.window.bgpic(path)
         self.window.update()
     
     def get_input(self, title, prompt):
+        """Gets a string input from user
+
+        Args:
+            title (str): Title of window
+            prompt (str): Input question
+
+        Returns:
+            str: user input
+        """
         n = self.window.textinput(title, prompt)
         if n:
             return n
     
     def get_num_input(self, title, prompt):
+        """Gets number input from user
+
+        Args:
+            title (str): Title of the window
+            prompt (str): input question
+
+        Returns:
+            int: user input number
+        """
         m = turtle.numinput(title, prompt, default=20, minval=5, maxval=200)
         if m: 
             return int(m)
         else: return 20
     
     def display_splash(self, path):
+        """Displays the splash screen for some time
+
+        Args:
+            path (str): path of the splash image
+        """
         self.set_bg_image(path)
         time.sleep(SPLASH_LINGER_TIME)
         self.set_bg_image("")
     
     def create_turtle(self):
+        """Creates a custom turtle on the board
+
+        Returns:
+            turtle object: Object of a custom turtle
+        """
         return CustomTurtle()
-            
-    
-    def draw_board(self, dark=False):
+             
+    def draw_board(self):
+        """Draws the main gui of the game
+
+        Returns:
+            button objects: All buttons created
+        """
         self.set_bg_image(BG_IMG)
         color = "black"
         leadercolor = "black"   
-        if dark:
-            color = "white"
-            leadercolor = "lightblue"
         
         # ----- DRAW BOARDS ------
         # Puzzle board
@@ -101,6 +133,18 @@ class GameWindow:
         return reset, load, quit, moves_counter, leader
     
     def place_text(self, text, font, coordinates, color="black", turt=CustomTurtle()):
+        """Places a text on screen
+
+        Args:
+            text (str): Text
+            font (tuple): Font options
+            coordinates (tuple): x, y coordinates where text is
+            color (str, optional): Color of text. Defaults to "black".
+            turt (turtle, optional): Turlte object. Defaults to CustomTurtle().
+
+        Returns:
+            object: turtle object that wrote text
+        """
         x, y = self.corner
         X, Y = coordinates
         turt.goto(x + X, y - Y)
@@ -109,6 +153,12 @@ class GameWindow:
         return turt
                   
     def load_puzzle(self, x, y):
+        """Loads a new puzzle from given list of puzzles
+
+        Args:
+            x (int): Passed not used
+            y (int): Passed not used
+        """
         names = ""
         puz_files = os.listdir("assets")
         for puz in puz_files:
@@ -129,6 +179,12 @@ class GameWindow:
             self.begin_round()
               
     def reset_game(self, x, y):
+        """Resets a puzzle
+
+        Args:
+            x (int): Passed not used
+            y (int): Passed not used
+        """
         self.puzzle.clear()
         self.puzzle = Puzzle(self.puzzle.get_name()) 
         self.puzzle.create_puzzle_pieces()
@@ -136,13 +192,23 @@ class GameWindow:
         self.begin_round()
               
     def quit_game(self, x, y):
+        """Quits the gamre
+
+        Args:
+            x (int): Passed not used
+            y (int): Passed not used
+        """
         self.window.clear()
         self.create_turtle().place_image(QUIT_MESSAGE_PATH, LOCATION_QUITMESSAGE)
         time.sleep(2)
         self.window.bye()
                    
     def display_round(self, shuffled=True):
-        
+        """Displays a new puzzle
+
+        Args:
+            shuffled (bool, optional): If shuffling is required or not. Defaults to True.
+        """
         
         # Do thumbnail stuff
         thumbnail = self.puzzle.get_thumbnail()
@@ -182,12 +248,21 @@ class GameWindow:
             Y += dist
                            
     def begin_round(self):
+        """Begins a new round
+        """
         data = self.puzzle.data       
         for row in data:
             for piece in row:
                 piece.turtle.turtle.onclick(partial(self.check_swap, piece))
     
     def check_swap(self, piece, x, y):
+        """Checks if 2 tiles can be swapped
+
+        Args:
+            piece (Piece): Piece object
+            x (int): Passed not used
+            y (int): Passed not used
+        """
         
         neighbours = self.puzzle.get_neighbours(piece)
         blank = self.puzzle.check_swap(neighbours)
@@ -202,6 +277,11 @@ class GameWindow:
             self.win()
             
     def update_moves(self, reset=False):
+        """Updates the moves counter
+
+        Args:
+            reset (bool, optional): If new game or not. Defaults to False.
+        """
         if reset:
             self.moves = self.initialmoves
         
@@ -214,12 +294,16 @@ class GameWindow:
             self.lost()
             
     def lost(self):
+        """Lost game and quit
+        """
         self.window.clear()
         self.set_bg_image("assets/resources/Lose.gif")
         time.sleep(3)
         self.window.bye()
         
     def win(self):
+        """Winner, update leaderboard and quit
+        """
         moves_used = self.initialmoves - self.moves
         
         self.update_leaders(moves_used)
@@ -231,6 +315,8 @@ class GameWindow:
         self.window.bye()
     
     def file_error(self):
+        """File not found error handling
+        """
         file_error = self.create_turtle()
         file_error.place_image(FILEERROR_MESSAGE_PATH, LOCATION_QUITMESSAGE)
         time.sleep(2)
@@ -238,20 +324,35 @@ class GameWindow:
         self.load_puzzle(0, 0)
     
     def update_leaders(self, moves):
+        """Updates leaderboard when someone wins
+
+        Args:
+            moves (int): Moves used
+        """
         self.leaders[moves] = self.name
         self.save_leaders()
      
     def save_leaders(self):
+        """Saves leaders to data file
+        """
         outputFile = 'leaders.data'
         with open(outputFile, 'wb') as fw:
             pickle.dump(self.leaders, fw)
   
     def restore_leaders(self):
+        """Restores leaderboard from data file
+        """
         inputFile = 'leaders.data'
         with open(inputFile, 'rb') as fd:
             self.leaders = pickle.load(fd)
                                 
     def start_game(self, x=0, y=0):
+        """Starts the main game
+
+        Args:
+            x (int, optional): Passed not used. Defaults to 0.
+            y (int, optional): Passed not used. Defaults to 0.
+        """
         # ------- Display Splash -------
         self.display_splash("assets/resources/splash_screen.gif")
 

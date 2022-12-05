@@ -2,8 +2,6 @@ from helper import *
 from random import shuffle
 import math
 from Piece import Piece
-
-
         
 class Puzzle:
     def __init__(self, path):
@@ -59,6 +57,8 @@ class Puzzle:
   
     # ----- METHODS -----
     def clear(self):
+        """Clears puzzle off the screen
+        """
         
         # Reset puzzle pieces
         for row in self.data:
@@ -71,6 +71,8 @@ class Puzzle:
             t.turtle.hideturtle()
             
     def create_puzzle_pieces(self):
+        """Creates turtles for pieces and stores in nested list
+        """
         images = self.images
         count = 1
         
@@ -89,6 +91,14 @@ class Puzzle:
                 count += 1
                    
     def get_neighbours(self, piece):
+        """Gets neighbours of a particular tile
+
+        Args:
+            piece (Piece): tile clicked
+
+        Returns:
+            list: list of neighbours
+        """
         x, y = piece.location
         neighbours = [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
         for row in self.data:
@@ -105,11 +115,28 @@ class Puzzle:
         return res
     
     def check_swap(self, neighbours):
+        """Checks if can be swapped
+
+        Args:
+            neighbours (list): List of neighbours of clicked tile
+
+        Returns:
+            Piece : neighbour that can be swapped
+        """
         for neighbour in neighbours:
             if neighbour.isblank:
                 return neighbour
     
     def swap_pieces(self, piece, blank):
+        """Swaps 2 pieces
+
+        Args:
+            piece (Piece): clicked piece
+            blank (Piece): blank piece
+
+        Returns:
+            bool: If win or no
+        """
         
         x, y = blank.location
         a, b = piece.location
@@ -129,19 +156,23 @@ class Puzzle:
         
         return self.check_win()
     
-    def check_win(self): 
+    def check_win(self):
+        """Checks if there is a win condition
+        """ 
         lst = []
         for row in self.data:
             for piece in row:
                 lst.append(piece.tile_num)
                 
-        
-        print(lst)
-        print(sorted(lst, reverse=False))
         if lst == sorted(lst, reverse=False):
             return True
                 
     def is_impossible_to_solve(self):
+        """Tried to implement the bonus but this doesnt work 
+
+        Returns:
+            bool: If impossible to solve or not
+        """
         puzzle = self.data
         
         # check if the puzzle is a 3x3 grid
@@ -174,6 +205,8 @@ class Puzzle:
             return True 
                       
     def shuffle(self):
+        """Shuffles a puzzle
+        """
         new_data = []
         for row in self.data:
             for piece in row:

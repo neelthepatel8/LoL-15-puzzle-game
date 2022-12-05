@@ -1,4 +1,12 @@
 def generate_puzzle_data(f):
+    """Generates the dictionary for the puzzle
+
+    Args:
+        f (str): path of the puz file
+
+    Returns:
+        dict: Dictionary with data of puzzle
+    """
     data = {}
     data["images"] = {}
     with open(f, mode="r") as file:
