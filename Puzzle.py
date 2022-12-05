@@ -68,7 +68,7 @@ class Puzzle:
                 if image[-9:-4] == "blank":
                     blank = True
                 
-                piece = Piece((i, j), image, blank)
+                piece = Piece((i, j), image, blank, tile_num=count)
                 
                 self.data[i].append(piece)
                 count += 1
@@ -104,30 +104,28 @@ class Puzzle:
         piece.location = x, y
         blank.location = a, b
         
-        piece_data = self.data[a][b] 
-        blank_data = self.data[x][y] 
+        self.data[a][b], self.data[x][y] = self.data[x][y], self.data[a][b]
+          
         
         p_x, p_y = piece.turtle.turtle.pos()
         b_x, b_y = blank.turtle.turtle.pos()
         
         piece.turtle.goto(b_x, b_y)
         blank.turtle.goto(p_x, p_y)
-        
-        piece_data, blank_data = blank_data, piece_data 
-        
+                
         
         return self.check_win()
     
-    def check_win(self):
+    def check_win(self): 
         lst = []
         for row in self.data:
             for piece in row:
-                lst.append(piece.img[-6:-4].strip("/"))
+                lst.append(piece.tile_num)
+                
         
-        lst.remove("nk")
         print(lst)
-        print(sorted(lst, reverse=True))
-        if lst == sorted(lst, reverse=True):
+        # print(sorted(lst, reverse=True))
+        if lst == sorted(lst, reverse=False):
             return True
                 
         

@@ -3,4 +3,4 @@ from helper import *
 
 window = GameWindow(title="Puzzle Game by Neel")
 
-window.window.mainloop()
+window.window.mainloop()            
