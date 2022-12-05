@@ -23,3 +23,7 @@ It just integrates it directly and I dont have to do anything after that. You ca
 My plan is it integrate images from instagram directly by just putting in the instagram username now.
 
 This was a fun project and taught me a lot!
+
+I used github throughout the project and here is my repository if you need a 
+cleaner and overview of the project to understand.
+https://github.com/neelthepatel8/final-project-game
