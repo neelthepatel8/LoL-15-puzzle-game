@@ -161,6 +161,11 @@ class GameWindow:
         """
         names = ""
         puz_files = os.listdir("assets")
+        
+        if len(puz_files) > 15:
+            with open("5001_puzzle.err", 'w') as file:
+                file.write(f"{time.localtime()} WARNING More than 15 puzzles exist, loading first 15. func.load_puzzle()")
+                
         for puz in puz_files:
             if puz.endswith(".puz"):
                 names += f"{puz}\n"
@@ -170,6 +175,8 @@ class GameWindow:
         puzzle2 = Puzzle(puz_name) 
         if puzzle2.error:
             self.file_error()
+            with open("5001_puzzle.err", 'w') as file:
+                file.write(f"{time.localtime()} ERROR Cannot find the puzzle file. func.load_puzzle()")
         else:
             self.puzzle.clear()
             self.puzzle = puzzle2

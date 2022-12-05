@@ -1,6 +1,7 @@
 from helper import *
 from random import shuffle
 import math
+import time
 from Piece import Piece
         
 class Puzzle:
@@ -11,7 +12,7 @@ class Puzzle:
         try:
             self.dict = generate_puzzle_data(self.path)
         
-        except OSError as er:
+        except FileNotFoundError as er:
             self.error = True
             return
         
@@ -22,6 +23,8 @@ class Puzzle:
         
         if not self.get_num_pieces():
             self.error = True
+            with open("5001_puzzle.err", 'w') as file:
+                file.write(f"{time.localtime()} ERROR Puzzle size doesnt work with my grid!. func.Puzzle.__init__()")
             return
             
         self.length = int(math.sqrt(self.get_num_pieces()))
