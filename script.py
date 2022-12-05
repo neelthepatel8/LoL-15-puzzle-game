@@ -32,9 +32,9 @@ def remove_extra():
             print("Removed extra tiles")
             
 def add_blank():
-    for file in os.listdir("assets/img/mario"):
+    for file in os.listdir("assets/img/masteryi"):
         if file == "blank.gif":
-            file_loc = os.path.join("assets/img/mario", file)
+            file_loc = os.path.join("assets/img/masteryi", file)
             new_loc = os.path.join(output_dir, file)
             os.popen(f'cp {file_loc} {new_loc}') 
             print("Added Blank tile")
