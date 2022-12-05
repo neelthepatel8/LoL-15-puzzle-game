@@ -1,6 +1,8 @@
 from GameWindow import GameWindow
-from helper import *
 
-window = GameWindow(title="Puzzle Game by Neel")
+def main():
+    window = GameWindow(title="Puzzle Game by Neel")
+    window.window.mainloop()        
 
-window.window.mainloop()            
+if __name__ == "__main__":    
+    main()

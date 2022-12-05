@@ -23,19 +23,24 @@ LOCATION_MODE_BTN_MOVED = 430, 631
 
 # ------ Text Locations -------
 LOCATION_MOVES_TEXT = 63, 650
-LOCATION_MOVESCOUNTER_TEXT = 358, 650
+LOCATION_MOVESCOUNTER_TEXT = 370, 650
 LOCATION_LEADERBOARD_TITLE_TEXT = 601, 179
 LOCATION_NAMES_START_TEXT = 601, 217
 NAMES_TEXT_DISTANCE = 30
 
 # ------- Text Attributes --------
-DEFAULT_FONT = "Arial"
+DEFAULT_FONT = "Courier"
 MOVES_FONT = DEFAULT_FONT, 32, "bold"
 LEADERBOARD_TITLE_FONT = DEFAULT_FONT, 32, "bold"
-LEADERBOARD_NAMES_FONT = DEFAULT_FONT, 20, "normal"
+LEADERBOARD_NAMES_FONT = DEFAULT_FONT, 24, "bold"
 
 # --------- Even Distance between objects -------
 DISTANCE_BETWEEN_OBJECTS = 45
+IMAGE_MOVE = 98 + 16
+
+# ----- Images -----
+IMAGE_START_CORNER = 65, 65
+BG_IMG = "assets/resources/bg_img.gif"
 
 # ----- Splash Screen Settings -----
 SPLASH_LINGER_TIME = 3
@@ -54,4 +59,8 @@ PUZZLES = ["fifteen", "luigi", "mario", "smiley", "yoshi"]
 # --------- Splashes ----------
 QUIT_MESSAGE_PATH = "assets/resources/quitmsg.gif"
 LOCATION_QUITMESSAGE =  400, 342
+FILEERROR_MESSAGE_PATH = "assets/resources/file_error.gif"
+
+# ----- Colors -----
+
 

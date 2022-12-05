@@ -2,24 +2,26 @@ import turtle
 import time
 from CustomTurtle import CustomTurtle
 from helper import *
-import random
 from Puzzle import Puzzle
 from settings import *
 from functools import partial
-from pprint import pprint
 import pickle
+import os
+import logging
 
 
 class GameWindow:
-    
     def __init__(self, title="Game Window", size=WINDOW_SIZE):
         self.window = turtle.Screen()
         self.width, self.height = size
         self.corner = 0 - self.width/2, self.height/2
         self.window.setup(self.width, self.height)
+        # self.window.screensize(sizex, sizey)
+        # self.window.setup(width=1.0, height=1.0, startx=None, starty=None)
         self.window.title(title)
-        self.puzzle = Puzzle("mario.puz")
+        self.puzzle = Puzzle("masteryi.puz")
         self.mode = "LIGHT"
+        self.leaders = {}
                 
         self.start_game()
         
@@ -45,21 +47,22 @@ class GameWindow:
     
     def create_turtle(self):
         return CustomTurtle()
-
-    def draw_board(self, total_moves=10, leaderboard=LEADERS, dark=False):
-         
-        color = "black" 
-        leadercolor = "blue"   
+            
+    
+    def draw_board(self, dark=False):
+        self.set_bg_image(BG_IMG)
+        color = "black"
+        leadercolor = "black"   
         if dark:
             color = "white"
             leadercolor = "lightblue"
         
         # ----- DRAW BOARDS ------
         # Puzzle board
-        self.create_turtle().draw_rectangle(location=LOCATION_PUZZLEBOARD, dimensions=PUZZLEBOARD_SIZE, color=color)
+        # self.create_turtle().draw_rectangle(location=LOCATION_PUZZLEBOARD, dimensions=PUZZLEBOARD_SIZE, color=color)
         
         # Leader board
-        self.create_turtle().draw_rectangle(location=LOCATION_LEADERBOARD, dimensions=LEADERBOARD_SIZE, color=leadercolor)
+        # self.create_turtle().draw_rectangle(location=LOCATION_LEADERBOARD, dimensions=LEADERBOARD_SIZE, color=leadercolor)
         
         # Options board
         self.create_turtle().draw_rectangle(location=LOCATION_OPTIONSBOARD, dimensions=OPTIONSBOARD_SIZE, color=color)
@@ -81,12 +84,18 @@ class GameWindow:
         
         self.initialmoves = self.moves
         
-        leader = self.place_text("Leaders", LEADERBOARD_TITLE_FONT, LOCATION_LEADERBOARD_TITLE_TEXT, color=leadercolor)
+        leader = self.create_turtle()
+        leader = self.place_text("Leaders", LEADERBOARD_TITLE_FONT, LOCATION_LEADERBOARD_TITLE_TEXT, turt=leader, color=leadercolor)
         
         # ------ LEADERBOARD NAMES -------
         X, Y = LOCATION_NAMES_START_TEXT
-        for each in leaderboard:
-            self.place_text(f"{each} : {leaderboard[each]}", LEADERBOARD_NAMES_FONT, (X, Y), color=leadercolor)
+        leaders = []
+        for leader in self.leaders:
+            leaders.append([leader, self.leaders[leader]])
+        
+        names = self.create_turtle()
+        for each in sorted(leaders):
+            names = self.place_text(f"{each[0]} : {each[1]}", LEADERBOARD_NAMES_FONT, (X, Y), turt=names, color=leadercolor)
             Y += NAMES_TEXT_DISTANCE
         
         return reset, load, quit, moves_counter, leader
@@ -98,15 +107,27 @@ class GameWindow:
         turt.turtle.pencolor(color)
         turt.turtle.write(text, move=False, font=font)
         return turt
-       
+                  
     def load_puzzle(self, x, y):
-        puz_name = self.get_input("What puzzle?", f"fifteen.puz\nluigi.puz\nmario.puz\nsmiley.puz\nyoshi.puz")
-        self.puzzle.clear()
-        self.puzzle = Puzzle(puz_name) 
-        self.puzzle.create_puzzle_pieces()
-        self.display_round(True)
-        self.begin_round()
+        names = ""
+        puz_files = os.listdir("assets")
+        for puz in puz_files:
+            if puz.endswith(".puz"):
+                names += f"{puz}\n"
+                
+        puz_name = self.get_input("What puzzle?", names)
         
+        puzzle2 = Puzzle(puz_name) 
+        if puzzle2.error:
+            self.file_error()
+        else:
+            self.puzzle.clear()
+            self.puzzle = puzzle2
+            self.puzzle.create_puzzle_pieces()
+            self.update_moves(reset=True)
+            self.display_round(True)
+            self.begin_round()
+              
     def reset_game(self, x, y):
         self.puzzle.clear()
         self.puzzle = Puzzle(self.puzzle.get_name()) 
@@ -115,6 +136,7 @@ class GameWindow:
         self.begin_round()
               
     def quit_game(self, x, y):
+        self.window.clear()
         self.create_turtle().place_image(QUIT_MESSAGE_PATH, LOCATION_QUITMESSAGE)
         time.sleep(2)
         self.window.bye()
@@ -154,13 +176,13 @@ class GameWindow:
                 if placed >= in_line ** 2:
                     turt.turtle.hideturtle()
                     continue
-                
+        
             placed = 0
             X = first[0]
             Y += dist
-               
+                           
     def begin_round(self):
-        data = self.puzzle.data
+        data = self.puzzle.data       
         for row in data:
             for piece in row:
                 piece.turtle.turtle.onclick(partial(self.check_swap, piece))
@@ -179,53 +201,55 @@ class GameWindow:
         if won:
             self.win()
             
-    def update_moves(self):
-        self.moves -= 1
+    def update_moves(self, reset=False):
+        if reset:
+            self.moves = self.initialmoves
+        
+        else:
+            self.moves -= 1
+            
         self.moves_counter.turtle.clear()
         self.place_text(f"{self.moves}", MOVES_FONT, LOCATION_MOVESCOUNTER_TEXT, turt=self.moves_counter, color="black")
         if self.moves == 0: 
             self.lost()
             
     def lost(self):
-        lost = self.create_turtle()
-        lost.place_image("assets/resources/Lose.gif", LOCATION_QUITMESSAGE)
-        time.sleep(2)
+        self.window.clear()
+        self.set_bg_image("assets/resources/Lose.gif")
+        time.sleep(3)
         self.window.bye()
         
     def win(self):
         moves_used = self.initialmoves - self.moves
         
         self.update_leaders(moves_used)
-        
-        win = self.create_turtle()
-        win.place_image("assets/resources/winner.gif", LOCATION_QUITMESSAGE)  
-        time.sleep(2)
-        win.turtle.hideturtle()
-        win.place_image("assets/resources/credits.gif", LOCATION_QUITMESSAGE)
+        self.window.clear()
+        self.set_bg_image("assets/resources/winner.gif")
+        time.sleep(4)
+        self.create_turtle().place_image("assets/resources/credits.gif", LOCATION_QUITMESSAGE)
         time.sleep(2)
         self.window.bye()
-     
+    
+    def file_error(self):
+        file_error = self.create_turtle()
+        file_error.place_image(FILEERROR_MESSAGE_PATH, LOCATION_QUITMESSAGE)
+        time.sleep(2)
+        file_error.turtle.hideturtle()
+        self.load_puzzle(0, 0)
+    
     def update_leaders(self, moves):
-        self.leaders.update({moves: self.name})
-        self.save_leaders(self.leaders)
-        pprint(self.leaders)
+        self.leaders[moves] = self.name
+        self.save_leaders()
      
-    
-    def save_leaders(self, data):
-        try:
-            with open("data.pickle", "wb") as f:
-                pickle.dump(data, f, protocol=pickle.HIGHEST_PROTOCOL)
-        except Exception as ex:
-            print("Error during pickling object (Possibly unsupported):", ex)
-
-    
-    def get_leaders(self):
-        try:
-            with open("data.pickle", "rb") as f:
-                return pickle.load(f)
-        except Exception as ex:
-            print("Error during unpickling object (Possibly unsupported):", ex)
- 
+    def save_leaders(self):
+        outputFile = 'leaders.data'
+        with open(outputFile, 'wb') as fw:
+            pickle.dump(self.leaders, fw)
+  
+    def restore_leaders(self):
+        inputFile = 'leaders.data'
+        with open(inputFile, 'rb') as fd:
+            self.leaders = pickle.load(fd)
                                 
     def start_game(self, x=0, y=0):
         # ------- Display Splash -------
@@ -236,8 +260,7 @@ class GameWindow:
         self.moves = self.get_num_input("Moves", "Enter the number of moves you want (5 - 200): ")
         
         # ---- Create Board -----
-        self.leaders = {}
-        self.leaders = self.get_leaders()
+        self.restore_leaders()
         option_buttons = self.draw_board()
         reset, load, quit, self.moves_counter, self.leader = option_buttons
         
@@ -245,6 +268,7 @@ class GameWindow:
         self.puzzle.create_puzzle_pieces()
         self.display_round()
         
+    
         # ------ Begin Round -----
         self.begin_round()
         

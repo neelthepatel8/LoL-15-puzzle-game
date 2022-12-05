@@ -1,26 +1,42 @@
 from helper import *
 from random import shuffle
 import math
-from CustomTurtle import CustomTurtle
-from pprint import pprint
 from Piece import Piece
-from copy import deepcopy
 
+
+        
 class Puzzle:
     def __init__(self, path):
+        
         self.path = "assets/" + path
-        self.dict = generate_puzzle_data(self.path)
+        
+        try:
+            self.dict = generate_puzzle_data(self.path)
+        
+        except OSError as er:
+            self.error = True
+            return
+        
+        self.error = False
         self.images = self.dict["images"]
         self.name = self.path[len("assets/"):]        
         self.thumbnail_turtle = []
+        
+        if not self.get_num_pieces():
+            self.error = True
+            return
+            
         self.length = int(math.sqrt(self.get_num_pieces()))
         self.data = []
-        
-        
-        
+           
     # ----- GETTERS -----
     def get_num_pieces(self):
-        return int(self.dict["number"])
+        n = int(self.dict["number"])
+        sqrt = math.sqrt(n)
+        
+        if int(sqrt + 0.5) ** 2 == n:
+            return n
+        return None
     
     def get_name(self):
         return self.name
@@ -36,8 +52,7 @@ class Puzzle:
     
     def get_turtles(self):
         return self.turtles
-    
-                    
+               
     # ----- SETTERS -----
     def set_turtles(self, t):
         self.turtles = t
@@ -73,8 +88,6 @@ class Puzzle:
                 self.data[i].append(piece)
                 count += 1
                    
-      
-
     def get_neighbours(self, piece):
         x, y = piece.location
         neighbours = [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
@@ -124,11 +137,41 @@ class Puzzle:
                 
         
         print(lst)
-        # print(sorted(lst, reverse=True))
+        print(sorted(lst, reverse=False))
         if lst == sorted(lst, reverse=False):
             return True
                 
+    def is_impossible_to_solve(self):
+        puzzle = self.data
         
+        # check if the puzzle is a 3x3 grid
+        if len(puzzle) != 3 or len(puzzle[0]) != 3:
+            return True
+        
+        # check if the puzzle contains 8 numbers and one empty space
+        nums = [1, 2, 3, 4, 5, 6, 7, 8]
+        for row in puzzle:
+            for num in row:
+                if num not in nums and num != 0:
+                    return True
+                elif num in nums:
+                    nums.remove(num)
+        if len(nums) != 0:
+            return True
+        
+        # count the number of inversions
+        inversions = 0
+        flat_puzzle = [num for row in puzzle for num in row]
+        for i in range(len(flat_puzzle) - 1):
+            for j in range(i + 1, len(flat_puzzle)):
+                if flat_puzzle[i] and flat_puzzle[j] and flat_puzzle[i] > flat_puzzle[j]:
+                    inversions += 1
+                    
+        # check if the puzzle is solvable
+        if inversions % 2 == 0:
+            return False
+        else:
+            return True 
                       
     def shuffle(self):
         new_data = []

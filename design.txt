@@ -1,0 +1,25 @@
+This project was way more complicated than I imagined it to be.
+Turtle library was really limiting on things that could be done and I had 
+to constantly go back to the documentation.
+My game mainly runs on a class called GameBoard which handles the 
+gui.
+Every setting that is needed to manipulate the game is in settings.py
+It creates a Puzzle instance which handles all the logic for the puzzle.
+The puzzle is a nested list containing turtles that are assigned for each image Piece
+on the board. 
+After every click, the puzzle checks for win and if its not a win, it continues.
+After a win, the leaders are stored into a leaders.data file using the pickle library. I did it
+with normal file handling in python but it just seemed better and faster to use pickle.
+
+After I was done with most of my project, I really was interested to integrate a game 
+called League of Legends into the project. When I tried adding the images and such to it, 
+it took me forever to get the names, puz file, image sizing etc right for it to work, even for just 1 image
+
+So I wrote a python script for it which does all the things that are required to integrate an image as a puzzle in the game.
+
+Now I can just take a random screenshot or image and put it in the "screenshots" folder and just run the script.py and thats it.
+It just integrates it directly and I dont have to do anything after that. You can try it out with your images. 
+
+My plan is it integrate images from instagram directly by just putting in the instagram username now.
+
+This was a fun project and taught me a lot!
